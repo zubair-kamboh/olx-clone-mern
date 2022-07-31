@@ -57,6 +57,11 @@ const signup = asynHandler(async (req, res) => {
     }
   )
 
+  // remove this after testing
+  // res.json({
+  //   token,
+  // })
+
   try {
     await transporter.sendMail({
       from: 'noreply@yahoo.com',
@@ -64,17 +69,15 @@ const signup = asynHandler(async (req, res) => {
       subject: 'Email Activation Link',
       html: `
       <h1>Please verify your account by clicking below link</h1>
-      <a href='http://google.com'>${process.env.CLIENT_URI}/activate/${token}</a>
+      <a href='${process.env.CLIENT_URI}/activate/${token}'>${process.env.CLIENT_URI}/activate/${token}</a>
       `,
     })
 
     res.json({
-      token,
       successMsg: 'Activation link sent to your email! please check.',
     })
   } catch (e) {
-    res.status(500)
-    throw new Error('Something went wrong')
+    throw new Error(e)
   }
 })
 
@@ -124,7 +127,14 @@ const activateAccount = asynHandler(async (req, res) => {
     throw new Error('Something went wrong')
   }
 
-  res.status(201).json({ successMsg: 'Registered Successfully!' })
+  // generate new token
+  const newToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: '1d',
+  })
+
+  res
+    .status(201)
+    .json({ successMsg: 'Registered Successfully!', token: newToken })
 })
 
 // SIGNIN
@@ -144,7 +154,7 @@ const signin = asynHandler(async (req, res) => {
   // check passwords length
   if (password.length < 8 || password2.length < 8) {
     res.status(400)
-    throw new Error('Minimum length show be 8 characters')
+    throw new Error('Minimum length should be 8 characters')
   }
 
   // generate token
@@ -167,7 +177,17 @@ const signin = asynHandler(async (req, res) => {
   }
 
   // sign in user
-  res.json({ successMsg: 'Sign in successfully!', token, user })
+  res.json({
+    successMsg: 'Sign in successfully!',
+    token,
+    user: {
+      _id: user._id,
+      email: user.email,
+      phoneno: user.phoneno,
+      fullname: user.fullname,
+      ads: user.ads,
+    },
+  })
 })
 
 // route      /api/auth/forget
@@ -175,6 +195,10 @@ const signin = asynHandler(async (req, res) => {
 // method     post
 const forgotPassword = asynHandler(async (req, res) => {
   const { email } = req.body
+  if (!email) {
+    throw new Error('Please enter your email')
+  }
+
   // check if user exist
   const user = await AuthModel.findOne({ email })
   if (!user) {
@@ -194,12 +218,11 @@ const forgotPassword = asynHandler(async (req, res) => {
       subject: 'Password Change Link',
       html: `
       <h1>Please change your account password by clicking below link</h1>
-      <button style='color: white; cursor: pointer; background: tomato; font-size: 3rem; color: #333; outline: none; border: none; padding: 10px 30px;'>Change Password</button>
+      <a href='${process.env.CLIENT_URI}/change-password/${token}'>${process.env.CLIENT_URI}/change-password/${token}</a>
       `,
     })
 
     res.json({
-      token,
       successMsg: 'Please check your email.',
     })
   } catch (e) {
@@ -213,7 +236,7 @@ const forgotPassword = asynHandler(async (req, res) => {
 // method     put
 const changePassword = asynHandler(async (req, res) => {
   const { password, password2 } = req.body
-
+  console.log(password)
   if (!password || !password2) {
     res.status(400)
     throw new Error('Please include all fields')
@@ -227,7 +250,7 @@ const changePassword = asynHandler(async (req, res) => {
   // check passwords length
   if (password.length < 8 || password2.length < 8) {
     res.status(400)
-    throw new Error('Minimum length show be 8 characters')
+    throw new Error('Minimum length should be 8 characters')
   }
 
   // get token
@@ -306,7 +329,7 @@ const googleLogin = asyncHandler(async (req, res) => {
       expiresIn: '7d',
     })
 
-    res.json({ token, successMessage: 'Logged in successfully', user })
+    res.json({ token, successMsg: 'Logged in successfully', user })
   }
 
   if (!user) {
@@ -326,7 +349,7 @@ const googleLogin = asyncHandler(async (req, res) => {
     await user.save()
 
     if (user) {
-      res.json({ token, successMessage: 'Logged in successfully', user })
+      res.json({ token, successMsg: 'Logged in successfully', user })
     }
   }
 })

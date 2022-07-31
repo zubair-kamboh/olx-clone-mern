@@ -1,48 +1,81 @@
-import logo from './logo.svg'
 import './App.css'
-import { useEffect } from 'react'
-import axios from 'axios'
-import decodeJwt from 'jwt-decode'
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import './styles/footer.css'
+import PostAd from './pages/PostAd'
+import Login from './pages/Login'
+import SignUp from './pages/SignUp'
+import ActivateAccount from './pages/ActivateAccount'
+import ChangePassword from './pages/ChangePassword'
+import FindAccount from './pages/FindAccount'
+import { Toaster } from 'react-hot-toast'
+import { PublicRoute, ProtectedRoute } from './utilities/ProtectedRoute'
+import Ad from './pages/Item'
 
 function App() {
-  const handleCredentialResponse = (response) => {
-    const user = decodeJwt(response.credential)
-
-    axios({
-      method: 'POST',
-      url: '/api/auth/googlelogin',
-      headers: {
-        Authorization: `Bearer ${response.credential}`,
-      },
-    })
-      .then((res) => console.log(res))
-      .catch((e) => console.log(e))
-  }
-
-  useEffect(() => {
-    /* global google */
-    google.accounts.id.initialize({
-      client_id:
-        '755428588274-5nl45or7hrlck14neughadquor3bjaph.apps.googleusercontent.com',
-      callback: handleCredentialResponse,
-    })
-
-    google.accounts.id.renderButton(document.getElementById('buttonDiv'), {
-      theme: 'outline',
-      size: 'large',
-    })
-    google.accounts.id.prompt()
-  }, [])
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <div id="buttonDiv"></div>
-      </header>
+    <div className="app">
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/post"
+            element={
+              <ProtectedRoute>
+                <PostAd />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/signin"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <PublicRoute>
+                <SignUp />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/activate/:token"
+            element={
+              <PublicRoute>
+                <ActivateAccount />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/change-password/:token"
+            element={
+              <PublicRoute>
+                <ChangePassword />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/find-account"
+            element={
+              <PublicRoute>
+                <FindAccount />
+              </PublicRoute>
+            }
+          />
+          <Route path="/item/:id" element={<Ad />} />
+        </Routes>
+        <Footer />
+      </Router>
+
+      <Toaster />
     </div>
   )
 }

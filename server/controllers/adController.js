@@ -5,8 +5,10 @@ const AuthModel = require('../models/authModel')
 // POST ADS
 const postAd = asyncHandler(async (req, res) => {
   const user = req.user
-  // return
-  const { title, description, brand, condition, images, location, price } =
+
+  const filenames = req.files.map((file) => file.filename)
+
+  const { title, description, brand, condition, location, price, category } =
     req.body
 
   if (
@@ -14,9 +16,10 @@ const postAd = asyncHandler(async (req, res) => {
     !description ||
     !brand ||
     !condition ||
-    !images ||
+    !req.files ||
     !location ||
-    !price
+    !price ||
+    !category
   ) {
     res.status(400)
     throw new Error('Please include all fields')
@@ -27,9 +30,10 @@ const postAd = asyncHandler(async (req, res) => {
     description,
     brand,
     condition,
-    images,
+    images: filenames,
     location,
     price,
+    category,
     user: user._id,
   }
 
@@ -37,7 +41,7 @@ const postAd = asyncHandler(async (req, res) => {
 
   await doc.save()
   if (doc) {
-    res.json(doc)
+    res.json({ successMsg: 'Your ad has been published' })
 
     // add item to user array
     const updateUserItem = await AuthModel.findOneAndUpdate(
@@ -46,8 +50,6 @@ const postAd = asyncHandler(async (req, res) => {
         $push: { ads: doc._id },
       }
     )
-
-    console.log(updateUserItem)
   } else {
     throw new Error('could not save your ad')
   }
@@ -55,10 +57,7 @@ const postAd = asyncHandler(async (req, res) => {
 
 // GET ADS
 const getAds = asyncHandler(async (req, res) => {
-  const ads = await AdModel.find({}).populate({
-    path: 'user',
-    select: '-password',
-  })
+  const ads = await AdModel.find({})
 
   if (!ads) {
     res.status(404)
@@ -84,6 +83,20 @@ const getAd = asyncHandler(async (req, res) => {
   res.json(ad)
 })
 
+// GET Item User
+const itemUser = asyncHandler(async (req, res) => {
+  const { userId } = req.body
+  console.log(req.body)
+  const user = await AuthModel.findOne({ _id: userId }).select('-password')
+
+  if (!user) {
+    res.status(404)
+    throw new Error('No user found')
+  }
+
+  res.json(user)
+})
+
 // DELETE INDIVIDUAL AD
 const deleteAd = asyncHandler(async (req, res) => {
   const authUser = req.user
@@ -106,7 +119,7 @@ const deleteAd = asyncHandler(async (req, res) => {
     throw new Error('No item found! Cannot delete this item')
   }
 
-  res.json({ message: 'Ad deleted' })
+  res.json({ successMsg: 'Ad deleted' })
 })
 
 // UPDATE INDIVIDUAL AD
@@ -114,8 +127,17 @@ const updateAd = asyncHandler(async (req, res) => {
   const authUser = req.user
 
   const id = req.params.id
-  const { title, description, brand, condition, images, location, price } =
-    req.body
+
+  const {
+    title,
+    description,
+    brand,
+    condition,
+    images,
+    location,
+    price,
+    category,
+  } = req.body
 
   // check if user is authorized to delete this ad
   const ad = await AdModel.findOne({ _id: id }).select('user')
@@ -136,16 +158,16 @@ const updateAd = asyncHandler(async (req, res) => {
       images,
       location,
       price,
+      category,
     },
     { new: true }
   )
 
   if (!updatedAd) {
-    res.status(400)
-    throw new Error('ad could not updated')
+    throw new Error('Something went wrong')
   }
 
   res.json(updatedAd)
 })
 
-module.exports = { postAd, getAds, updateAd, getAd, deleteAd }
+module.exports = { postAd, getAds, updateAd, getAd, deleteAd, itemUser }

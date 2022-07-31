@@ -1,0 +1,16 @@
+.file_upload_button {
+  background-color: transparent;
+  padding: 20px;
+  border: 1px solid #000;
+}
+
+.editicon {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+.deleteicon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
