@@ -1,0 +1,25 @@
+.details_container {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 47, 52, 0.36);
+  margin: 16px 0px 0px;
+}
+
+.details_container .title {
+  color: #002f34;
+}
+.details_container .items {
+  display: flex;
+  flex-wrap: wrap;
+}
+.details_container .items .item {
+  display: flex;
+  flex-basis: 50%;
+}
+.details_container .items .item .attribute {
+  opacity: 0.6;
+  flex-basis: 50%;
+}
+.details_container .items .item .value {
+  flex-basis: 50%;
+}
