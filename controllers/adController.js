@@ -6,6 +6,10 @@ const AuthModel = require('../models/authModel')
 const postAd = asyncHandler(async (req, res) => {
   const user = req.user
 
+  if (!req.files || req.files.length < 1) {
+    throw new Error('Please include at least one image')
+  }
+
   const filenames = req.files.map((file) => file.filename)
 
   const { title, description, brand, condition, location, price, category } =
