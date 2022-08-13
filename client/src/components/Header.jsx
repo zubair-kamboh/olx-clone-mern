@@ -157,7 +157,11 @@ function Header() {
                   <Link
                     to="/myads"
                     className="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"
-                    style={{ color: 'black' }}
+                    style={{
+                      color: '#333',
+                      padding: '6px 16px',
+                      textDecoration: 'none',
+                    }}
                   >
                     My Ads
                   </Link>
