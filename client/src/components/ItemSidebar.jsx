@@ -14,6 +14,7 @@ const ItemSidebar = ({ ad }) => {
   )
 
   const time = moment(ad.createdAt).fromNow()
+  const date = moment(ad.createdAt).format('ll')
 
   useEffect(() => {
     dispatch(itemUser(ad.user))
@@ -96,7 +97,7 @@ const ItemSidebar = ({ ad }) => {
             }}
           >
             <span style={{ fontWeight: 'bold' }}>{fullname && fullname}</span>
-            <span style={{ opacity: '.6' }}>Member since Feb 2022</span>
+            <span style={{ opacity: '.6' }}>Member since {date}</span>
           </div>
         </div>
 

@@ -153,6 +153,12 @@ export const authSlice = createSlice({
         ad.title.toLowerCase().includes(input.toLowerCase())
       )
     },
+
+    filterByCategory: (state, action) => {
+      state.filteredAds = state.ads.filter(
+        (ad) => ad.location === action.payload
+      )
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -272,6 +278,11 @@ export const authSlice = createSlice({
   },
 })
 
-export const { reset, resetUserItem, searchFilter, filterAds } =
-  authSlice.actions
+export const {
+  reset,
+  resetUserItem,
+  searchFilter,
+  filterAds,
+  filterByCategory,
+} = authSlice.actions
 export default authSlice.reducer
