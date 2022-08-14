@@ -21,11 +21,8 @@ const ForgetPassword = () => {
     if (isSuccess) {
       toast.success(successMessage)
     }
-  }, [isError, isSuccess, errorMessage, successMessage, dispatch])
-
-  useEffect(() => {
     return () => dispatch(reset())
-  }, [dispatch])
+  }, [isError, isSuccess, errorMessage, successMessage, dispatch])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -54,7 +51,11 @@ const ForgetPassword = () => {
   return (
     <div>
       <Container>
-        <form className="contactform" onSubmit={handleSubmit}>
+        <form
+          className="contactform"
+          style={{ width: '50%', margin: 'auto' }}
+          onSubmit={handleSubmit}
+        >
           <h1 className="text-center">Please find your account</h1>
 
           <div className="my-4">

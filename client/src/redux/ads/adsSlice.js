@@ -156,7 +156,7 @@ export const authSlice = createSlice({
 
     filterByCategory: (state, action) => {
       state.filteredAds = state.ads.filter(
-        (ad) => ad.location === action.payload
+        (ad) => ad.category === action.payload
       )
     },
   },

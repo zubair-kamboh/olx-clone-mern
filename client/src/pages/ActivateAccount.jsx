@@ -22,7 +22,9 @@ const ActivateAccount = () => {
     if (isSuccess) {
       toast.success(successMessage)
     }
-  }, [isError, isSuccess, errorMessage, successMessage])
+
+    return () => dispatch(reset())
+  }, [isError, isSuccess, errorMessage, successMessage, dispatch])
 
   const handleSubmit = (e) => {
     e.preventDefault()

@@ -74,7 +74,7 @@ const PostAd = () => {
       description: '',
       brand: '',
       condition: '',
-      category: '',
+      category: 'Mobile Phones',
       price: null,
       images: [],
       location: '',
@@ -157,10 +157,12 @@ const PostAd = () => {
                   <option value="Cars">Cars</option>
                   <option value="Motorcycles">Motorcycles</option>
                   <option value="Houses">Houses</option>
-                  <option value="TV - Video - Audio">TV - Video - Audio</option>
-                  <option value="Tablets Land">Tablets</option>
-                  <option value="Tablets Land">Laptops</option>
-                  <option value="Plots">Land & Plots</option>
+                  <option value="TV">TV</option>
+                  <option value="Video - Audio">Video - Audio</option>
+                  <option value="Tablets">Tablets</option>
+                  <option value="Laptops">Laptops</option>
+                  <option value="Land & Plots">Land & Plots</option>
+                  <option value="Others">Others</option>
                 </Form.Select>
               </div>
 

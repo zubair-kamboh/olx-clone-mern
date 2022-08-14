@@ -26,11 +26,9 @@ const ChangePassword = () => {
     if (isSuccess) {
       toast.success(successMessage)
     }
-  }, [isError, isSuccess, errorMessage, successMessage, dispatch])
 
-  useEffect(() => {
     return () => dispatch(reset())
-  }, [dispatch])
+  }, [isError, isSuccess, errorMessage, successMessage, dispatch])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -65,7 +63,7 @@ const ChangePassword = () => {
         <form
           className="contactform"
           onSubmit={handleSubmit}
-          style={{ width: '70%', margin: 'auto' }}
+          style={{ width: '35%', margin: 'auto' }}
         >
           <h1 className="text-center">Please update your password</h1>
 
