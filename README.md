@@ -17,4 +17,4 @@ Tech I Used:
 7- Google Places Autocomplete Api
 8- JWT Auth
 
-![Uploading olx-portfolio-img1.png…]()
+![olx-portfolio-img1](https://user-images.githubusercontent.com/70833594/185860261-81b96cc4-894b-4cc3-9c5d-05b85a78002e.png)
