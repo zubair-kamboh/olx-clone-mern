@@ -6,8 +6,6 @@ const app = express()
 const cors = require('cors')
 const path = require('path')
 
-const port = process.env.PORT || 8000
-
 // body parser middlewares
 app.use(express.json())
 app.use(
@@ -42,4 +40,5 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
+const port = process.env.PORT || 8000
 const server = app.listen(port, () => console.log(`Server running on ${port}`))

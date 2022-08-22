@@ -15,8 +15,8 @@ const PostAd = () => {
     title: '',
     description: '',
     brand: '',
-    condition: '',
-    category: '',
+    condition: 'New',
+    category: 'Mobile Phones',
     price: null,
     images: [],
   })

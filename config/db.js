@@ -1,11 +1,16 @@
 const { default: mongoose } = require('mongoose')
+require('../models/adModel')
+require('../models/authModel')
 
-const connection = () => {
+const connection = async () => {
   try {
-    mongoose
-      .connect(process.env.MONGO_URI)
-      .then(() => console.log('connected to db'))
-      .catch((e) => console.log(e))
+    const connection = await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+    })
+
+    if (connection) {
+      console.log('db connected')
+    }
   } catch (e) {
     console.log(e)
   }
